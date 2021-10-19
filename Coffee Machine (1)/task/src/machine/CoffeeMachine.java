@@ -4,44 +4,62 @@ import java.util.Scanner;
 
 public class CoffeeMachine {
 
-    static final int WATER = 400;
-    static final int MILK = 540;
-    static final int COFFEE_BEANS = 120;
-    static final int DISPOSABLE_CUPS = 9;
-    static final int MONEY = 550;
-
     static int volumeOfWater = 0;
     static int volumeOfMilk = 0;
     static int weightOfCoffeeBeans = 0;
     static int numberOfCups = 0;
 
+    static int runningWater = 400;
+    static int runningMilk = 540;
+    static int runningCoffeeBeans = 120;
+    static int runningCups = 9;
+    static int runningCash = 550;
+
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        printCoffeeMachineState(WATER, MILK, COFFEE_BEANS, DISPOSABLE_CUPS, MONEY);
 
-        System.out.println("Write action (buy, fill, take):");
+        System.out.println("Write action (buy, fill, take, remaining, exit):");
         String action = scanner.next();
+        boolean proceed = true;
 
-        switch (action) {
-            case "buy":
-                System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ");
-                int buyOption = scanner.nextInt();
-                buyCoffee(buyOption);
-                break;
+        while (proceed) {
+            switch (action) {
+                case "buy":
+                    System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ");
+                    String response = scanner.next();
+                    if (response.equals("back")){
+                        break;
+                    } else {
+                        int buyOption = Integer.parseInt(response);
+                        buyCoffee(buyOption);
+                    }
+                    break;
 
-            case "fill":
-                takeReFillOption();
-                printCoffeeMachineState(WATER + volumeOfWater, MILK + volumeOfMilk, COFFEE_BEANS + weightOfCoffeeBeans, DISPOSABLE_CUPS + numberOfCups, MONEY);
-                break;
+                case "fill":
+                    takeReFillOption();
+                    calculateCurrentResource(volumeOfWater, volumeOfMilk, weightOfCoffeeBeans, numberOfCups, 0);
+                    break;
 
-            case "take":
-                giveMoney();
-                printCoffeeMachineState(WATER, MILK, COFFEE_BEANS, DISPOSABLE_CUPS, 0);
-                break;
+                case "take":
+                    giveMoney();
+                    break;
 
-            default:
-                break;
+                case "remaining":
+                    printCoffeeMachineState(runningWater, runningMilk, runningCoffeeBeans, runningCups, runningCash);
+                    break;
+
+                case "exit":
+                    proceed = false;
+                    break;
+                default:
+                    break;
+            }
+            if (proceed) {
+                System.out.println("Write action (buy, fill, take, remaining, exit):");
+                action = scanner.next();
+            }
+
         }
     }
 
@@ -91,14 +109,24 @@ public class CoffeeMachine {
                 cupRequired = 0;
                 break;
         }
-        printCoffeeMachineState(WATER - waterRequired, MILK - milkRequired, COFFEE_BEANS - coffeeBeansRequired, DISPOSABLE_CUPS - cupRequired, MONEY + cost);
+        if (runningWater < waterRequired) {
+            System.out.println("Sorry, not enough water!");
+        } else if ( runningMilk < milkRequired){
+            System.out.println("Sorry, not enough milk!");
+        } else if (runningCoffeeBeans < coffeeBeansRequired) {
+            System.out.println("Sorry, not enough coffee beans!");
+        } else {
+            System.out.println("I have enough resources, making you a coffee!");
+            calculateCurrentResource(-waterRequired, - milkRequired, -coffeeBeansRequired, -cupRequired, cost);
+        }
     }
 
     /*
         This method processes request to withdraw money from the machine.
      */
     private static void giveMoney() {
-        System.out.printf("I gave you $%d %n", MONEY);
+        System.out.printf("I gave you $%d %n", runningCash);
+        runningCash = 0;
     }
 
 
@@ -129,5 +157,13 @@ public class CoffeeMachine {
         System.out.printf("%d g of coffee beans  %n", coffee_beans);
         System.out.printf("%d disposable cups  %n", disposable_cups);
         System.out.printf("$%d of money  %n", money);
+    }
+
+    private static void calculateCurrentResource(int waterRequired, int milkRequired, int coffeeBeansRequired, int cupRequired, int cost) {
+        runningWater += waterRequired;
+        runningMilk += milkRequired;
+        runningCoffeeBeans += coffeeBeansRequired;
+        runningCups += cupRequired;
+        runningCash += cost;
     }
 }
