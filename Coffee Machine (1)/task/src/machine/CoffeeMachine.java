@@ -31,8 +31,8 @@ public class CoffeeMachine {
                     if (response.equals("back")){
                         break;
                     } else {
-                        int buyOption = Integer.parseInt(response);
-                        buyCoffee(buyOption);
+                        int coffeeOption = Integer.parseInt(response);
+                        buyCoffee(coffeeOption);
                     }
                     break;
 
@@ -63,16 +63,16 @@ public class CoffeeMachine {
         }
     }
 
-    private static void buyCoffee(int buyOption) {
+    private static void buyCoffee(int coffeeOption) {
         int waterRequired;
         int milkRequired;
         int coffeeBeansRequired;
         int cost;
         int cupRequired = 1;
 
-        switch (buyOption) {
+        switch (coffeeOption) {
             /*
-                For the espresso, the coffee machine needs 250 ml of water and 16 g of coffee beans. It costs $4.
+                For espresso, the coffee machine needs 250 ml of water and 16 g of coffee beans. It costs $4.
              */
             case 1:         // espresso
                 waterRequired = 250;
@@ -82,9 +82,9 @@ public class CoffeeMachine {
                 break;
 
             /*
-                For the latte, the coffee machine needs 350 ml of water, 75 ml of milk, and 20 g of coffee beans. It costs $7.
+                For latte, the coffee machine needs 350 ml of water, 75 ml of milk, and 20 g of coffee beans. It costs $7.
              */
-            case 2:         // latter
+            case 2:         // latte
                 waterRequired = 350;
                 milkRequired = 75;
                 coffeeBeansRequired = 20;
@@ -92,7 +92,7 @@ public class CoffeeMachine {
                 break;
 
             /*
-                For the cappuccino, the coffee machine needs 200 ml of water, 100 ml of milk, and 12 g of coffee beans. It costs $6.
+                For cappuccino, the coffee machine needs 200 ml of water, 100 ml of milk, and 12 g of coffee beans. It costs $6.
              */
             case 3:         // cappuccino
                 waterRequired = 200;
@@ -117,7 +117,7 @@ public class CoffeeMachine {
             System.out.println("Sorry, not enough coffee beans!");
         } else {
             System.out.println("I have enough resources, making you a coffee!");
-            calculateCurrentResource(-waterRequired, - milkRequired, -coffeeBeansRequired, -cupRequired, cost);
+            calculateCurrentResource(-waterRequired, -milkRequired, -coffeeBeansRequired, -cupRequired, cost);
         }
     }
 

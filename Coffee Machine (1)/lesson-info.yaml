@@ -1,5 +1,4 @@
 type: framework
-custom_name: Coffee Machine
 content:
 - Making coffee
 - Ingredient calculator
@@ -7,4 +6,4 @@ content:
 - Buy, fill, take_
 - Keep track of the supplies
 - Brush up your code
-current_task: 4
+current_task: 5

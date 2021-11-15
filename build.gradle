@@ -1,27 +1,26 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            url 'https://jitpack.io'
-        }
-    }
-
-    dependencies {
-        classpath "com.github.hyperskill:hs-gradle-plugin:release-SNAPSHOT"
-    }
-
-    configurations.all {
-        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-    }
-}
-
 apply plugin: 'hyperskill'
 
 subprojects {
     apply plugin: 'application'
     apply plugin: 'java'
 
-    sourceCompatibility = hs.java.version
+    def userJava = Integer.parseInt(JavaVersion.current().getMajorVersion())
+    def hsJava = Integer.parseInt("17")
+    def testJava = Math.max(userJava, hsJava)
+
+    java.toolchain.languageVersion = JavaLanguageVersion.of(testJava)
+
+    compileJava {
+        javaCompiler = javaToolchains.compilerFor {
+            languageVersion = JavaLanguageVersion.of(userJava)
+        }
+    }
+
+    compileTestJava {
+        javaCompiler = javaToolchains.compilerFor {
+            languageVersion = JavaLanguageVersion.of(testJava)
+        }
+    }
 
     repositories {
         mavenCentral()
